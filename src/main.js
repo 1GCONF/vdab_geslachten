@@ -85,17 +85,11 @@ window.onload = () => {
             // 1. Krijg data vanuit JSON gefilterd op geslachtKeuze (filterOp..)
             // 2. Teken de gefilterde elementen in de container (toonOp...)
             switch (geslachtKeuze) {
-              case "man":
-                toonOpM(filterOpM(data));
-                break;
-              case "vrouw":
-                toonOpV(filterOpV(data));
-                break;
-              case "x":
-                toonOpX(filterOpX(data));
-                break;
               case "all":
-                toonOpAlle(filterOpAlle(data));
+                toonOp(data);
+                break;
+              default:
+                toonOp(filterOp(data, geslachtKeuze));
                 break;
             }
           }
@@ -103,31 +97,15 @@ window.onload = () => {
         .catch((e) => console.error("Async error fetching JSON - " + e));
     })();
   };
-  const filterOpM = (data) => {
-    return data;
+  const toonOp = (array_filtered) => {
+    console.log(array_filtered);
   };
-  const filterOpV = (data) => {
-    return data;
+  const filterOp = (array_json, geslacht) => {
+    const result = array_json.filter(
+      (jsonitem) => jsonitem.geslacht === geslacht
+    );
+    return result;
   };
-  const filterOpX = (data) => {
-    return data;
-  };
-  const filterOpAlle = (data) => {
-    return data;
-  };
-  const toonOpM = (array) => {
-    console.log(array[0]);
-  };
-  const toonOpV = (array) => {
-    console.log(array[0]);
-  };
-  const toonOpX = (array) => {
-    console.log(array[0]);
-  };
-  const toonOpAlle = (array) => {
-    console.log(array[0]);
-  };
-
   const geslachtOpties = [
     { man: "Mannen" },
     { vrouw: "Vrouwen" },
