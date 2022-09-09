@@ -72,29 +72,62 @@ window.onload = () => {
   };
   const handleKeuzeGeslacht = (geslachtKeuze) => {
     // display by chosen filter(gelsachtKeuze) using JSON data
-    switch (geslachtKeuze) {
-      case "value":
-        break;
-      case "value":
-        break;
-      case "value":
-        break;
-      case "all":
-        (async () => {
-          fetch("./geslachten.json")
-            .then((response) => response.json())
-            .then((data) => toonAlle(data))
-            .catch((e) => console.error("Async error fetching JSON - " + e));
-        })();
-        break;
+    (async () => {
+      fetch("./geslachten.json")
+        .then((response) => response.json())
+        .then((data) => {
+          // Keuzevalidatie
+          const val = [];
+          geslachtOpties.forEach((optie) => {
+            val.push(Object.keys(optie)[0]);
+          });
+          if (val.includes(geslachtKeuze)) {
+            // 1. Krijg data vanuit JSON gefilterd op geslachtKeuze (filterOp..)
+            // 2. Teken de gefilterde elementen in de container (toonOp...)
+            switch (geslachtKeuze) {
+              case "man":
+                toonOpM(filterOpM(data));
+                break;
+              case "vrouw":
+                toonOpV(filterOpV(data));
+                break;
+              case "x":
+                toonOpX(filterOpX(data));
+                break;
+              case "all":
+                toonOpAlle(filterOpAlle(data));
+                break;
+            }
+          }
+        })
+        .catch((e) => console.error("Async error fetching JSON - " + e));
+    })();
+  };
+  const filterOpM = (data) => {
+    return data;
+  };
+  const filterOpV = (data) => {
+    return data;
+  };
+  const filterOpX = (data) => {
+    return data;
+  };
+  const filterOpAlle = (data) => {
+    return data;
+  };
+  const toonOpM = (array) => {
+    console.log(array[0]);
+  };
+  const toonOpV = (array) => {
+    console.log(array[0]);
+  };
+  const toonOpX = (array) => {
+    console.log(array[0]);
+  };
+  const toonOpAlle = (array) => {
+    console.log(array[0]);
+  };
 
-      default:
-        break;
-    }
-  };
-  const toonAlle = (data) => {
-    
-  };
   const geslachtOpties = [
     { man: "Mannen" },
     { vrouw: "Vrouwen" },
