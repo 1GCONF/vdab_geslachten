@@ -19,17 +19,13 @@ window.onload = () => {
     container.style.display = "grid";
     container.style.minHeight = "calc(100vh - 50px)";
     container.style.alignItems = "center";
-    container.style.justifyContent = "center";
-    container.style.border = "6px solid";
+    container.style.justifyItems = "center";
     // parentE > container > main
     const main = document.createElement("main");
     container.append(main);
-    main.style.position = "absolute";
-    main.style.width = "65%";
+    main.style.width = "90%";
     main.style.height = "90%";
     main.style.outline = "2px solid";
-    main.style.left = "50%";
-    main.style.transform = "translateX(-50%)";
     main.style.borderRadius = "12px";
     main.style.display = "grid";
     main.style.gridTemplateRows = ".2fr 1fr";
@@ -42,8 +38,10 @@ window.onload = () => {
       const a = document.createElement("a");
       li.append(a);
       ul_mvx.append(li);
+      li.className = Object.keys(geslachtString)[0];
       li.style.listStyleType = "none";
       li.dataset.geslacht = Object.keys(geslachtString)[0];
+      a.className = Object.keys(geslachtString)[0];
       a.href = "#";
       a.innerHTML = Object.values(geslachtString)[0];
       a.style.textDecoration = "none";
@@ -65,6 +63,7 @@ window.onload = () => {
     // parentE > container > main > article_personen
     const article_personen = document.createElement("article");
     main.append(article_personen);
+    article_personen.className = "article_personen";
     article_personen.style.borderRadius = "0 0 12px 12px";
     article_personen.style.margin = "1.5rem";
     //return
@@ -84,21 +83,84 @@ window.onload = () => {
           if (val.includes(geslachtKeuze)) {
             // 1. Krijg data vanuit JSON gefilterd op geslachtKeuze (filterOp..)
             // 2. Teken de gefilterde elementen in de container (toonOp...)
-            switch (geslachtKeuze) {
-              case "all":
-                toonOp(data);
-                break;
-              default:
-                toonOp(filterOp(data, geslachtKeuze));
-                break;
-            }
+            geslachtKeuze === "all"
+              ? toonOp(data)
+              : toonOp(filterOp(data, geslachtKeuze));
           }
         })
         .catch((e) => console.error("Async error fetching JSON - " + e));
     })();
   };
   const toonOp = (array_filtered) => {
-    console.log(array_filtered);
+    if (array_filtered.length > 0) {
+      // article > ul_titels
+      const parentE = app.querySelector(".article_personen");
+      const ul_titels = document.createElement("ul");
+      parentE.append(ul_titels);
+      ul_titels.className = "ul_titels";
+      ul_titels.style.display = "grid";
+      ul_titels.style.gridTemplateColumns = "1fr 1fr 1fr 1fr";
+      ul_titels.style.justifyContent = "space-evenly";
+      ul_titels.style.margin="25px 0";
+      // article > ul_titels > li_titel
+      const json_keys = Object.keys(array_filtered[0]);
+      for (const titel of json_keys) {
+        const li_titel = document.createElement("li");
+        const h3 = document.createElement("h3");
+        li_titel.append(h3);
+        ul_titels.append(li_titel);
+        li_titel.style.listStyleType = "none";
+        h3.innerHTML = titel;
+        h3.style.textTransform = "capitalize";
+        h3.style.textAlign = "center";
+      }
+      for (const json of array_filtered) {
+        // article > ul_json
+        const ul_json = document.createElement("ul");
+        parentE.append(ul_json);
+        ul_json.style.display = "grid";
+        ul_json.style.gridTemplateColumns = "1fr 1fr 1fr 1fr";
+        ul_json.style.justifyItems="center";
+        // article > ul_json > li_json
+        for (const [key, value] of Object.entries(json)) {
+          const li = document.createElement("li");
+          ul_json.append(li);
+          switch (key) {
+            case "geslacht":
+              const img_geslacht = document.createElement("img");
+              img_geslacht.src = `./img/${value}.png`;
+              img_geslacht.alt = "vrouw avatar";
+              li.append(img_geslacht);
+              break;
+            case "foto":
+              const img_avatar = document.createElement("img");
+              img_avatar.src = `./img/${value}`;
+              img_avatar.alt = "vrouw avatar";
+              li.append(img_avatar);
+              break;
+
+            default:
+               li.innerHTML=value;
+              break;
+          }
+          //  if (key === "geslacht") {
+          //    const img = document.createElement("img");
+          //    img.src = `./img/${value}.png`;
+          //    img.alt="vrouw avatar";
+          //    li.append(img);
+          //  }
+          li.style.listStyleType = "none";
+        }
+        console.log("___________________________");
+        //   for (const json_li of Object.values(json)) {
+        //     const li = document.createElement("li");
+        //     ul_json.append(li);
+        //     li.innerHTML=json_li;
+        //     li.style.listStyleType="none";
+        //     li.style.textAlign="center";
+        //   }
+      }
+    }
   };
   const filterOp = (array_json, geslacht) => {
     const result = array_json.filter(
