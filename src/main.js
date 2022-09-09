@@ -29,6 +29,7 @@ window.onload = () => {
     main.style.borderRadius = "12px";
     main.style.display = "grid";
     main.style.gridTemplateRows = ".2fr 1fr";
+    main.className = "main";
     // parentE > container > main > ul_mvx
     const ul_mvx = document.createElement("ul");
     main.append(ul_mvx);
@@ -93,15 +94,26 @@ window.onload = () => {
   };
   const toonOp = (array_filtered) => {
     if (array_filtered.length > 0) {
+      if (
+        document.getElementsByClassName("article_personen")[0].children.length >
+        0
+      ) {
+        document
+          .getElementsByClassName("article_personen")[0]
+          .children[0].remove();
+      }
       // article > ul_titels
       const parentE = app.querySelector(".article_personen");
+      const wrapper = document.createElement("div");
       const ul_titels = document.createElement("ul");
-      parentE.append(ul_titels);
+      wrapper.append(ul_titels);
+      parentE.append(wrapper);
+      wrapper.className = "wrapper_json";
       ul_titels.className = "ul_titels";
       ul_titels.style.display = "grid";
       ul_titels.style.gridTemplateColumns = "1fr 1fr 1fr 1fr";
       ul_titels.style.justifyContent = "space-evenly";
-      ul_titels.style.margin="25px 0";
+      ul_titels.style.margin = "25px 0";
       // article > ul_titels > li_titel
       const json_keys = Object.keys(array_filtered[0]);
       for (const titel of json_keys) {
@@ -117,10 +129,10 @@ window.onload = () => {
       for (const json of array_filtered) {
         // article > ul_json
         const ul_json = document.createElement("ul");
-        parentE.append(ul_json);
+        wrapper.append(ul_json);
         ul_json.style.display = "grid";
         ul_json.style.gridTemplateColumns = "1fr 1fr 1fr 1fr";
-        ul_json.style.justifyItems="center";
+        ul_json.style.justifyItems = "center";
         // article > ul_json > li_json
         for (const [key, value] of Object.entries(json)) {
           const li = document.createElement("li");
@@ -140,25 +152,11 @@ window.onload = () => {
               break;
 
             default:
-               li.innerHTML=value;
+              li.innerHTML = value;
               break;
           }
-          //  if (key === "geslacht") {
-          //    const img = document.createElement("img");
-          //    img.src = `./img/${value}.png`;
-          //    img.alt="vrouw avatar";
-          //    li.append(img);
-          //  }
           li.style.listStyleType = "none";
         }
-        console.log("___________________________");
-        //   for (const json_li of Object.values(json)) {
-        //     const li = document.createElement("li");
-        //     ul_json.append(li);
-        //     li.innerHTML=json_li;
-        //     li.style.listStyleType="none";
-        //     li.style.textAlign="center";
-        //   }
       }
     }
   };
